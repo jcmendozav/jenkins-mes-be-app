@@ -3,9 +3,9 @@ node {
 	stage('Publish to dockerhub'){
     checkout scm
 
-    docker.withRegistry('https://registry.hub.docker.com', 'dockerHub') {
+    docker.withRegistry('https://registry.hub.docker.com', 'mowa_docker_hub') {
 
-        def customImage = docker.build("soportemowa/mes_be_service")
+        def customImage =  docker.build("soportemowa/mes_be_service")
 
         /* Push the container to the custom Registry */
         customImage.push()
