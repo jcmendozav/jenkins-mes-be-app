@@ -14,14 +14,20 @@ pipeline {
 
                 '''
             }
+
         }
 
         stage('Pull from git') {
             steps {
                 checkout scm
 
-                sh 'cd $projectDir'
+                sh "$PWD"
+                dir('$projectDir') {
+                    sh "$PWD"
+                }
+                sh "$PWD"
             }
+
         }
 
         stage('Build') {
