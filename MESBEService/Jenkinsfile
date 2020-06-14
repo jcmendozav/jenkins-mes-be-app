@@ -31,13 +31,15 @@ pipeline {
         }
         stage('Publish to dockerhub') {
             steps {
-                docker.withRegistry('https://registry.hub.docker.com', 'mowa_docker_hub') {
-                    def appDockerfile = 'app.Dockerfile'
+                script {
+                    docker.withRegistry('https://registry.hub.docker.com', 'mowa_docker_hub') {
+                        def appDockerfile = 'app.Dockerfile'
 
-                    def customImage =  docker.build('soportemowa/mes_be_service', "-f ${appDockerfile} .")
+                        def customImage =  docker.build('soportemowa/mes_be_service', "-f ${appDockerfile} .")
 
             /* Push the container to the custom Registry */
-                    customImage.push()
+                        customImage.push()
+                    }
                 }
             }
         }
