@@ -22,7 +22,7 @@ pipeline {
                 checkout scm
 
                 sh "$PWD"
-                dir('${env.WORKSPACE}/MESBEService') {
+                dir("${env.WORKSPACE}/MESBEService") {
                     sh "$PWD"
                 }
                 sh "$PWD"
