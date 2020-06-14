@@ -5,7 +5,9 @@ node {
 
     docker.withRegistry('https://registry.hub.docker.com', 'mowa_docker_hub') {
 
-        def customImage =  docker.build("soportemowa/mes_be_service")
+    	def appDockerfile = 'app.Dockerfile'
+
+        def customImage =  docker.build("soportemowa/mes_be_service","-f ${appDockerfile} .")
 
         /* Push the container to the custom Registry */
         customImage.push()
