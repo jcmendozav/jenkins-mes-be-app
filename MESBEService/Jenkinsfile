@@ -32,7 +32,7 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh 'cd $projectDir'
+                //sh 'cd $projectDir'
                 sh 'echo $(pwd)'
 
                 sh 'mvn clean package -DskipTests '
@@ -40,7 +40,7 @@ pipeline {
         }
         stage('Publish to dockerhub') {
             steps {
-                sh 'cd $projectDir'
+                //sh 'cd $projectDir'
                 sh 'echo $(pwd)'
 
                 script {
