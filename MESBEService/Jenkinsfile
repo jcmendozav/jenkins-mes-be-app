@@ -17,8 +17,11 @@ pipeline {
         }
 
         stage('Pull from git') {
-            checkout scm
-            sh 'cd $projectDir'
+            steps {
+                checkout scm
+
+                sh 'cd $projectDir'
+            }
         }
 
         stage('Build') {
@@ -27,13 +30,15 @@ pipeline {
             }
         }
         stage('Publish to dockerhub') {
-            docker.withRegistry('https://registry.hub.docker.com', 'mowa_docker_hub') {
-                def appDockerfile = 'app.Dockerfile'
+            steps {
+                docker.withRegistry('https://registry.hub.docker.com', 'mowa_docker_hub') {
+                    def appDockerfile = 'app.Dockerfile'
 
-                def customImage =  docker.build('soportemowa/mes_be_service', "-f ${appDockerfile} .")
+                    def customImage =  docker.build('soportemowa/mes_be_service', "-f ${appDockerfile} .")
 
-                /* Push the container to the custom Registry */
-                customImage.push()
+            /* Push the container to the custom Registry */
+                    customImage.push()
+                }
             }
         }
     }
