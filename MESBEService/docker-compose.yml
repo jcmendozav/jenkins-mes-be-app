@@ -1,0 +1,19 @@
+version: "3"
+services:
+  mesdbserver:
+    
+    build:
+      context: .
+      dockerfile: db.Dockerfile
+    env_file:
+      db.env
+    ports:
+      - "15432:5432"
+  app:
+    build:
+      context: .
+      dockerfile: app.Dockerfile
+    ports:
+      - "8081:8081"
+    depends_on:
+      - mesdbserver
