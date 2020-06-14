@@ -8,7 +8,7 @@ node {
 		def projectDir='MESBEService'
     	def appDockerfile = 'app.Dockerfile'
 
-        def customImage =  docker.build("soportemowa/mes_be_service","-f ${projectDir}/${appDockerfile} ./{projectDir}")
+        def customImage =  docker.build("soportemowa/mes_be_service","-f ${projectDir}/${appDockerfile} ./${projectDir}")
 
         /* Push the container to the custom Registry */
         customImage.push()
