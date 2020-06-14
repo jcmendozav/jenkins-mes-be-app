@@ -32,10 +32,9 @@ pipeline {
 
                 def customImage =  docker.build('soportemowa/mes_be_service', "-f ${appDockerfile} .")
 
-        /* Push the container to the custom Registry */
+                /* Push the container to the custom Registry */
                 customImage.push()
             }
         }
     }
-
 }
