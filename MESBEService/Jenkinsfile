@@ -21,11 +21,11 @@ pipeline {
             steps {
                 checkout scm
 
-                sh "echo $(pwd)"
+                sh 'echo $(pwd)'
                 dir("${env.WORKSPACE}/MESBEService") {
-                    sh "echo $(pwd)"
+                    sh 'echo $(pwd)'
                 }
-                sh "echo $(pwd)"
+                sh 'echo $(pwd)'
             }
 
         }
