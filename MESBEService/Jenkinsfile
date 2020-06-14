@@ -1,17 +1,48 @@
 node {
 
-	stage('Publish to dockerhub'){
-    checkout scm
+	def projectDir='MESBEService'
+    sh 'cd ${projectDir}' 
 
+
+    agent any
+    tools { 
+        maven 'Maven 3.3.9' 
+        jdk 'jdk8' 
+    }
+    stages {
+        stage ('Initialize') {
+            steps {
+                sh '''
+                    echo "PATH = ${PATH}"
+                    echo "M2_HOME = ${M2_HOME}"
+                ''' 
+            }
+        }
+    
+	stage('Pull from git'){
+    checkout scm
+    
+    }
+    
+    stage('Build'){
+            steps {
+            
+                sh 'mvn clean package -Dmaven.test.failure.ignore=true install' 
+            }
+    
+    }
+    stage('Publish to dockerhub'){
+    
     docker.withRegistry('https://registry.hub.docker.com', 'mowa_docker_hub') {
 
-		def projectDir='MESBEService'
-    	def appDockerfile = 'app.Dockerfile'
+        def appDockerfile = 'app.Dockerfile'
 
-        def customImage =  docker.build("soportemowa/mes_be_service","-f ${projectDir}/${appDockerfile} ./${projectDir}")
+
+        def customImage =  docker.build("soportemowa/mes_be_service","-f ${appDockerfile} .")
 
         /* Push the container to the custom Registry */
         customImage.push()
     }
+    
     }
 }
