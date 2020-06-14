@@ -26,11 +26,15 @@ pipeline {
 
         stage('Build') {
             steps {
+                sh 'cd $projectDir'
+
                 sh 'mvn clean package -DskipTests '
             }
         }
         stage('Publish to dockerhub') {
             steps {
+                sh 'cd $projectDir'
+
                 script {
                     docker.withRegistry('https://registry.hub.docker.com', 'mowa_docker_hub') {
                         def appDockerfile = 'app.Dockerfile'
