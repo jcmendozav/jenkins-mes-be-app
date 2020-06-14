@@ -1,5 +1,4 @@
 pipeline {
-
     agent any
     tools {
         maven 'maven'
@@ -12,30 +11,31 @@ pipeline {
                     echo "PATH = ${PATH}"
                     echo "M2_HOME = ${M2_HOME}"
                     echo "projectDir"="MESBEService"
-                    
+
                 '''
+            }
+        }
+
+        stage('Pull from git') {
+            checkout scm
+            sh 'cd $projectDir'
+        }
+
+        stage('Build') {
+            steps {
+                sh 'mvn clean package -Dmaven.test.failure.ignore=true install'
+            }
+        }
+        stage('Publish to dockerhub') {
+            docker.withRegistry('https://registry.hub.docker.com', 'mowa_docker_hub') {
+                def appDockerfile = 'app.Dockerfile'
+
+                def customImage =  docker.build('soportemowa/mes_be_service', "-f ${appDockerfile} .")
+
+        /* Push the container to the custom Registry */
+                customImage.push()
             }
         }
     }
 
-        stage('Pull from git') {
-        checkout scm
-    		sh 'cd $projectDir'
-        }
-
-        stage('Build') {
-        steps {
-            sh 'mvn clean package -Dmaven.test.failure.ignore=true install'
-        }
-        }
-        stage('Publish to dockerhub') {
-        docker.withRegistry('https://registry.hub.docker.com', 'mowa_docker_hub') {
-            def appDockerfile = 'app.Dockerfile'
-
-                        def customImage =  docker.build('soportemowa/mes_be_service', "-f ${appDockerfile} .")
-
-        /* Push the container to the custom Registry */
-            customImage.push()
-        }
-        }
 }
