@@ -14,7 +14,6 @@ pipeline {
 
                 '''
             }
-
         }
 
         stage('Pull from git') {
@@ -27,30 +26,33 @@ pipeline {
                 }
                 sh 'echo $(pwd)'
             }
-
         }
 
         stage('Build') {
             steps {
                 //sh 'cd $projectDir'
-                sh 'echo $(pwd)'
+                dir("${env.WORKSPACE}/MESBEService") {
+                    sh 'echo $(pwd)'
 
-                sh 'mvn clean package -DskipTests '
+                    sh 'mvn clean package -DskipTests '
+                }
             }
         }
         stage('Publish to dockerhub') {
             steps {
-                //sh 'cd $projectDir'
-                sh 'echo $(pwd)'
+                dir("${env.WORKSPACE}/MESBEService") {
+                    //sh 'cd $projectDir'
+                    sh 'echo $(pwd)'
 
-                script {
-                    docker.withRegistry('https://registry.hub.docker.com', 'mowa_docker_hub') {
-                        def appDockerfile = 'app.Dockerfile'
+                    script {
+                        docker.withRegistry('https://registry.hub.docker.com', 'mowa_docker_hub') {
+                            def appDockerfile = 'app.Dockerfile'
 
-                        def customImage =  docker.build('soportemowa/mes_be_service', "-f ${appDockerfile} .")
+                            def customImage =  docker.build('soportemowa/mes_be_service', "-f ${appDockerfile} .")
 
             /* Push the container to the custom Registry */
-                        customImage.push()
+                            customImage.push()
+                        }
                     }
                 }
             }
